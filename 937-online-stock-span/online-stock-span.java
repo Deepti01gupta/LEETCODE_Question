@@ -17,9 +17,14 @@ class StockSpanner {
     }
     public int next(int price) {
         index+=1;
-        while(!st.empty() && st.peek().first<=price) st.pop();
+        while(!st.empty() && st.peek().first<=price){
+            st.pop();
+        }
+
         int ans=(st.empty()) ? -1:st.peek().second;
+        
         st.push(new Pair(price,index));
+        
         return index-ans;
     }
 }
