@@ -10,25 +10,29 @@ class Node {
 
 class Solution {
     public Node flatten(Node head) {
-        Node temp=head;
+        Node cur=head;
         Stack<Node> st=new Stack<>();
-        while(temp!=null){
-            if(temp.child!=null){
-                if(temp.next!=null){
-                    st.push(temp.next);
-                }
-                temp.next=temp.child;
-                temp.next.prev=temp;
-                temp.child=null;
 
+        while(cur!=null){
+            if(cur.child!=null){
+                if(cur.next!=null){
+                    st.push(cur.next);
+                }
+
+                cur.next=cur.child;
+                cur.next.prev=cur;
+                cur.child=null;
             }
-            if(!st.isEmpty() && temp.next==null){
+
+            if(!st.isEmpty() && cur.next==null){
                 Node nn=st.pop();
-                temp.next=nn;
-                nn.prev=temp;
+                cur.next=nn;
+                nn.prev=cur;
             }
-            temp=temp.next;
+
+            cur=cur.next;
         }
+
         return head;
     }
 }
