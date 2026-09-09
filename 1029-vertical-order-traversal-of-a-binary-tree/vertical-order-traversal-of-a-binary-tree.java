@@ -14,56 +14,60 @@
  * }
  */
 class Solution {
+    class pair{
+        TreeNode node;
+        int l;
+        int v;
+        pair(TreeNode node, int l, int v){
+            this.node=node;
+            this.l=l;
+            this.v=v;
+        }
+    }
+
     public List<List<Integer>> verticalTraversal(TreeNode root) {
-        Queue<VerticalPair> q=new LinkedList<>();
-        TreeMap<Integer, List<VerticalPair>> map=new TreeMap<>();
-        q.add(new VerticalPair(root,0,0));
+        List<List<Integer>> ans=new ArrayList<>();
+
+        TreeMap<Integer, List<pair>> map=new TreeMap<>();
+        Queue<pair> q=new LinkedList<>();
+        q.add(new pair(root, 0, 0));
+
         while(!q.isEmpty()){
-            VerticalPair vp=q.poll();
-            if(!map.containsKey(vp.v)){
-                map.put(vp.v,new ArrayList<>());
+            pair rp=q.poll();
+            if(!map.containsKey(rp.v)){
+                map.put(rp.v, new ArrayList<>());
             }
-            map.get(vp.v).add(vp);
-            if(vp.node.left!=null){
-                q.add(new VerticalPair(vp.node.left, vp.l+1, vp.v-1));
+            map.get(rp.v).add(rp);
+
+            if(rp.node.left != null){
+                q.add(new pair(rp.node.left, rp.l+1, rp.v-1));
             }
-            if(vp.node.right!=null){
-                q.add(new VerticalPair(vp.node.right, vp.l+1, vp.v+1));
+            if(rp.node.right != null){
+                q.add(new pair(rp.node.right, rp.l+1, rp.v+1));
             }
         }
-        List<List<Integer>> ans=new ArrayList<>();
+
         for(int key:map.keySet()){
-            List<VerticalPair> ll=map.get(key);
-            Collections.sort(ll,new Comparator<VerticalPair>(){
+            List<pair> ll=map.get(key);
+            Collections.sort(ll, new Comparator<pair>(){
                 @Override
-                public int compare(VerticalPair o1, VerticalPair o2){
-                    if(o1.l==o2.l){
-                        return o1.node.val-o2.node.val;
+                public int compare(pair p1, pair p2){
+                    if(p1.l == p2.l){
+                        return p1.node.val - p2.node.val;
                     }
                     return 0;
                 }
             });
 
-            List<Integer> list=new ArrayList<>();
-            for(VerticalPair v:ll){
-                list.add(v.node.val);
+            List<Integer> res=new ArrayList<>();
+            for(pair v:ll){
+                res.add(v.node.val);
             }
-            ans.add(list);
+
+            ans.add(res);
         }
+
         return ans;
 
-
-
-    }
-}
-
-class VerticalPair{
-    TreeNode node;
-    int l;  // row
-    int v;  // col
-    public VerticalPair(TreeNode node, int l, int v){
-        this.l=l;
-        this.v=v;
-        this.node=node;
     }
 }
