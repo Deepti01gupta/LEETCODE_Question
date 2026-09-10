@@ -1,0 +1,69 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int amountOfTime(TreeNode root, int start) {
+        Map<Integer, Set<Integer>> map=new HashMap<>();
+        convertTreeToGraph(root, 0, map);
+
+        Queue<Integer> q=new LinkedList<>();
+        q.add(start);
+
+        Set<Integer> vis=new HashSet<>();
+        vis.add(start);
+
+        int min=0;
+
+        while(!q.isEmpty()){
+            int size=q.size();
+
+            for(int i=0; i<size; i++){
+                int cur=q.poll();
+
+                for(int num:map.get(cur)){
+                    if(!vis.contains(num)){
+                        q.add(num);
+                        vis.add(num);
+                    }
+                }
+            }
+            min++;
+        }
+        return min-1;
+    }
+
+    private void convertTreeToGraph(TreeNode curr, int parent, Map<Integer, Set<Integer>> mp){
+        if(curr!=null){
+            if(!mp.containsKey(curr.val)){
+                mp.put(curr.val,new HashSet<>());
+            }
+            Set<Integer> adj=mp.get(curr.val);
+            if(parent!=0){
+                adj.add(parent);
+            }
+            if(curr.left!=null){
+                adj.add(curr.left.val);
+            }
+            if(curr.right!=null){
+                adj.add(curr.right.val);
+            }
+            convertTreeToGraph(curr.left, curr.val, mp);
+            convertTreeToGraph(curr.right, curr.val, mp);
+            
+        }
+    }
+
+
+}
