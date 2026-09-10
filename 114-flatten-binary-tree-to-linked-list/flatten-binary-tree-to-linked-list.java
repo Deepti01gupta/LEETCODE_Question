@@ -15,27 +15,31 @@
  */
 class Solution {
     public void flatten(TreeNode root) {
-        makell(root);
-    }
-
-    public TreeNode makell(TreeNode root){
-
         if(root==null){
-            return null;
-        }
-        if(root.left==null && root.right==null){
-            return root;
+            return ;
         }
 
-        TreeNode left_tail=makell(root.left);
-        TreeNode right_tail=makell(root.right);
+        TreeNode cur=root;
 
-        if(root.left!=null){
-            left_tail.right=root.right;
-            root.right=root.left;
-            root.left=null;
+        Stack<TreeNode> st=new Stack<>();
+        st.add(root);
+
+        while(!st.isEmpty()){
+            TreeNode rp=st.pop();
+
+            if(cur != rp){
+                cur.right=rp;
+                cur.left=null;
+                cur=cur.right;
+            }
+
+            if(rp.right != null){
+                st.add(rp.right);
+            }
+
+            if(rp.left != null){
+                st.add(rp.left);
+            }
         }
-
-        return right_tail != null ? right_tail : left_tail;
     }
 }
