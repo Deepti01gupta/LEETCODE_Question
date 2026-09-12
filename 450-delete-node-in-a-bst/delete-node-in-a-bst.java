@@ -18,15 +18,14 @@ class Solution {
         if(root==null){
             return null;
         }
+
         if(root.val<key){
-            root.right=deleteNode(root.right,key);
+            root.right=deleteNode(root.right, key);
         }
         else if(root.val>key){
-            root.left=deleteNode(root.left,key);
+            root.left=deleteNode(root.left, key);
         }
         else{
-
-            // 1 or 0 child
             if(root.left==null){
                 return root.right;
             }
@@ -34,19 +33,20 @@ class Solution {
                 return root.left;
             }
             else{
-                int max=max(root.left);
-                root.left=deleteNode(root.left,max);
+                int max=find(root.left);
+                root.left=deleteNode(root.left, max);
                 root.val=max;
             }
         }
+
         return root;
     }
-    public int max(TreeNode root){
+
+    public int find(TreeNode root){
         if(root==null){
             return Integer.MIN_VALUE;
         }
-        int max=max(root.right);
-
-        return Math.max(max,root.val);
+        int max=find(root.right);
+        return Math.max(max, root.val);
     }
 }
