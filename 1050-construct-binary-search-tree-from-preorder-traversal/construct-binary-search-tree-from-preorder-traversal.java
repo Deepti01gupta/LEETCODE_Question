@@ -14,19 +14,37 @@
  * }
  */
 class Solution {
-    int i=0;
     public TreeNode bstFromPreorder(int[] preorder) {
-        return bst(preorder, Integer.MAX_VALUE);
-    }
-
-    private TreeNode bst(int[] preorder, int bound){
-        if(i==preorder.length || preorder[i]>bound){
+        if(preorder.length == 0){
             return null;
         }
 
-        TreeNode root=new TreeNode(preorder[i++]);
-        root.left=bst(preorder,root.val);
-        root.right=bst(preorder,bound);
+        TreeNode root=new TreeNode(preorder[0]);
+        for(int i=1; i<preorder.length; i++){
+            solve(root, preorder[i]);
+        }
+
         return root;
+    }
+
+    public void solve(TreeNode root, int val){
+        if(root==null){
+            return;
+        }
+
+        if(root.val>val){
+            if(root.left==null){
+                root.left=new TreeNode(val);
+                return;
+            }
+            solve(root.left, val);
+        }
+        else{
+            if(root.right==null){
+                root.right=new TreeNode(val);
+                return;
+            }
+            solve(root.right, val);
+        }
     }
 }
