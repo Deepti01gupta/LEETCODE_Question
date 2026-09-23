@@ -1,50 +1,48 @@
 class Solution {
     
-
-    // public int maxProfit(int[] prices) {
-    //     int n=prices.length;
-    //     int[][] prev=new int[2][3];
-        
-    //     for(int idx=n-1; idx>=0; idx--){
-    //         int[][] cur=new int[2][3];
-    //         for(int turn=0; turn<=1; turn++){
-    //             for(int cap=1; cap<=2; cap++){
-    //                 int ans=0;
-    //                 if(turn==1){
-    //                     ans=Math.max(-prices[idx] + prev[0][cap] , prev[1][cap]);
-    //                 }
-    //                 else{
-    //                     ans=Math.max(prices[idx] + prev[1][cap-1] , prev[0][cap]);
-    //                 }
-    //                 cur[turn][cap]=ans;
-    //             }
-    //         }
-    //         prev=cur;
-    //     }
-    //     return prev[1][2];
-    // }
-
-
-
     public int maxProfit(int k, int[] prices) {
         int n=prices.length;
-        int[][][] dp=new int[n+1][2][k+1];
+        int[][] prev=new int[2][k+1];   
         for(int idx=n-1; idx>=0; idx--){
+            int[][] cur=new int[2][k+1];
             for(int turn=0; turn<=1; turn++){
                 for(int cap=1; cap<=k; cap++){
                     int ans=0;
                     if(turn==1){
-                        ans=Math.max(-prices[idx] + dp[idx+1][0][cap] , dp[idx+1][1][cap]);
+                        ans=Math.max(-prices[idx] + prev[0][cap] , prev[1][cap]);
                     }
                     else{
-                        ans=Math.max(prices[idx] + dp[idx+1][1][cap-1] , dp[idx+1][0][cap]);
+                        ans=Math.max(prices[idx] + prev[1][cap-1] , prev[0][cap]);
                     }
-                    dp[idx][turn][cap]=ans;
+                    cur[turn][cap]=ans;
                 }
             }
+            prev=cur;
         }
-        return dp[0][1][k];
+        return prev[1][k];
     }
+
+
+
+    // public int maxProfit(int k, int[] prices) {
+    //     int n=prices.length;
+    //     int[][][] dp=new int[n+1][2][k+1];
+    //     for(int idx=n-1; idx>=0; idx--){
+    //         for(int turn=0; turn<=1; turn++){
+    //             for(int cap=1; cap<=k; cap++){
+    //                 int ans=0;
+    //                 if(turn==1){
+    //                     ans=Math.max(-prices[idx] + dp[idx+1][0][cap] , dp[idx+1][1][cap]);
+    //                 }
+    //                 else{
+    //                     ans=Math.max(prices[idx] + dp[idx+1][1][cap-1] , dp[idx+1][0][cap]);
+    //                 }
+    //                 dp[idx][turn][cap]=ans;
+    //             }
+    //         }
+    //     }
+    //     return dp[0][1][k];
+    // }
     
 
 
