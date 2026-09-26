@@ -1,51 +1,37 @@
 class Solution {
+
     public int longestCommonSubsequence(String text1, String text2) {
-        // int[][] dp=new int[text1.length()][text2.length()];
-        // for(int[] a:dp){
-        //     Arrays.fill(a,-1);
-        // }
-        // return LCS(text1,text2,0,0,dp);
-
-        return LCSBU(text1, text2);
+        int[][] dp=new int[text1.length()][text2.length()];
+        for(int[] r:dp){
+            Arrays.fill(r, -1);
+        }
+        return solve(0, 0, text1, text2, dp);
     }
-    public int LCSBU(String s1, String s2) {
-		int[][] dp=new int[s1.length()+1][s2.length()+1];
-		
-		
-		for(int i=1; i<dp.length; i++) {
-			for(int j=1; j<dp[0].length; j++) {
-				int ans=0;
-				if(s1.charAt(i-1)==s2.charAt(j-1)) {
-					ans=1+dp[i-1][j-1];
-				}
-				else {
-					int f=dp[i-1][j];
-					int s=dp[i][j-1];
-					ans=Math.max(f, s);
-				}
-				dp[i][j]=ans;
-			}
-		}
-		return dp[dp.length-1][dp[0].length-1];
-	}
+    public int solve(int i, int j, String s1, String s2, int[][] dp){
+        if(i==s1.length() || j==s2.length()){
+            return 0;
+        }
+        if(dp[i][j]!=-1){
+            return dp[i][j];
+        }
+        if(s1.charAt(i)==s2.charAt(j)){
+            return dp[i][j]= 1 + solve(i+1, j+1, s1, s2, dp);
+        }
+        return dp[i][j]=Math.max(solve(i+1, j, s1, s2, dp), solve(i, j+1, s1, s2, dp));
+    }
 
-    // public int LCS(String s1, String s2, int i, int j, int[][] dp) {
-	// 	if(i==s1.length() || j==s2.length()) {
-	// 		return 0;
-	// 	}
-    //     if(dp[i][j]!=-1){
-    //         return dp[i][j]; 
+
+
+    // public int longestCommonSubsequence(String text1, String text2) {
+    //     return solve(0, 0, text1, text2);
+    // }
+    // public int solve(int i, int j, String s1, String s2){
+    //     if(i==s1.length() || j==s2.length()){
+    //         return 0;
     //     }
-		
-	// 	int ans=0;
-	// 	if(s1.charAt(i)==s2.charAt(j)) {
-	// 		ans= 1+ LCS(s1,s2,i+1,j+1,dp);
-	// 	}
-	// 	else {
-	// 		int f=LCS(s1,s2,i+1,j,dp);
-	// 		int s=LCS(s1,s2,i,j+1,dp);
-	// 		ans=Math.max(f, s);
-	// 	}
-	// 	return dp[i][j]=ans;
-	// }
+    //     if(s1.charAt(i)==s2.charAt(j)){
+    //         return 1 + solve(i+1, j+1, s1, s2);
+    //     }
+    //     return Math.max(solve(i+1, j, s1, s2), solve(i, j+1, s1, s2));
+    // }
 }
