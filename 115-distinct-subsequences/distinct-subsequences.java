@@ -1,51 +1,66 @@
 class Solution {
     public int numDistinct(String s, String t) {
-        // return Coin_change(s,t,0,0);
-
-
-        int[][] dp=new int[s.length()][t.length()];
-		for(int[] a:dp){
-          Arrays.fill(a,-1);
-		}
-		return Coin_change1(s,t,0,0,dp);
+        int n=s.length();
+        int m=t.length();
+        int[][] dp=new int[n+1][m+1];
+        for(int i=0; i<=n; i++){
+            dp[i][0]=1;
+        }        
+        for(int i=1; i<=n; i++){
+            for(int j=1; j<=m; j++){
+                if(s.charAt(i-1)==t.charAt(j-1)){
+                    dp[i][j]=dp[i-1][j-1] + dp[i-1][j];
+                }
+                else{
+                    dp[i][j]=dp[i-1][j];
+                }
+            }
+        }
+        return dp[n][m];
     }
 
-    public static int Coin_change1(String s, String t, int i, int j, int[][] dp) {
-		if(j==t.length()) {
-			return 1;	
-		}
-		if(i==s.length()) {
-			return 0;
-		}
-		
-		if(dp[i][j]!=-1) {
-			return dp[i][j];
-		}
-		
-		int inc=0, exc=0;
-		if(s.charAt(i)==t.charAt(j)) {
-			inc=Coin_change1(s,t,i+1,j+1,dp);
-		}
-		exc=Coin_change1(s,t,i+1,j,dp);
-		return dp[i][j]=exc+inc;
-	}
+
+
+    // public int numDistinct(String s, String t) {
+    //     int n=s.length();
+    //     int m=t.length();
+    //     int[][] dp=new int[n][m];
+    //     for(int[] r:dp){
+    //         Arrays.fill(r, -1);
+    //     }
+    //     return solve(n-1, m-1, s, t, dp);
+    // }
+    // public int solve(int i, int j, String s, String t, int[][] dp){
+    //     if(j<0){
+    //         return 1;
+    //     }
+    //     if(i<0){
+    //         return 0;
+    //     }
+    //     if(dp[i][j]!=-1){
+    //         return dp[i][j];
+    //     }
+    //     if(s.charAt(i)==t.charAt(j)){
+    //         return dp[i][j]=solve(i-1, j-1, s, t, dp) + solve(i-1, j, s, t, dp);
+    //     }
+    //     return dp[i][j]=solve(i-1, j, s, t, dp);
+    // }
 
 
 
-    public static int Coin_change(String s, String t, int i, int j) {
-		if(j==t.length()) {
-			return 1;
-		}
-		if(i==s.length()) {
-			return 0;
-		}
-		
-		int inc=0, exc=0;
-		if(s.charAt(i)==t.charAt(j)) {
-			inc=Coin_change(s,t,i+1,j+1);
-		}
-		exc=Coin_change(s,t,i+1,j);
-		return inc+exc;
-		
-	}
+    // public int numDistinct(String s, String t) {
+    //     return solve(s.length()-1, t.length()-1, s, t);
+    // }
+    // public int solve(int i, int j, String s, String t){
+    //     if(j<0){
+    //         return 1;
+    //     }
+    //     if(i<0){
+    //         return 0;
+    //     }
+    //     if(s.charAt(i)==t.charAt(j)){
+    //         return solve(i-1, j-1, s, t) + solve(i-1, j, s, t);
+    //     }
+    //     return solve(i-1, j, s, t);
+    // }
 }
