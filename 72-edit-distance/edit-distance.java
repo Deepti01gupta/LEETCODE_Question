@@ -1,55 +1,52 @@
 class Solution {
-    public int minDistance(String s, String t) {
-
-        // return  min(s,t,0,0);
-
-        int[][] dp=new int[s.length()][t.length()];
-        for(int i=0; i<dp.length; i++){
-            Arrays.fill(dp[i],-1);
+    public int minDistance(String word1, String word2) {
+        int n=word1.length();
+        int m=word2.length();
+        int[][] dp=new int[n][m];
+        for(int[] r:dp){
+            Arrays.fill(r, -1);
         }
-        return min1(s,t,0,0,dp);
+        return solve(n-1, m-1, word1, word2, dp);
     }
-
-    public int min1(String s, String t, int i, int j, int[][] dp){
-        if(i==s.length()){
-            return t.length()-j;
+    public int solve(int i, int j, String s, String t, int[][] dp){
+        if(i<0){
+            return j+1;
         }
-        if(j==t.length()){
-            return s.length()-i;
+        if(j<0){
+            return i+1;
         }
         if(dp[i][j]!=-1){
             return dp[i][j];
         }
-        int ans=0;
         if(s.charAt(i)==t.charAt(j)){
-            ans=min1(s,t,i+1,j+1,dp);
+            return dp[i][j]=0 + solve(i-1, j-1, s, t, dp);
         }
-        else{
-            int I=min1(s,t,i,j+1,dp);
-            int R=min1(s,t,i+1,j+1,dp);
-            int D=min1(s,t,i+1,j,dp);
-            ans=Math.min(I,Math.min(D,R))+1;
-        }
-        return dp[i][j]=ans;
+        int I=solve(i, j-1, s, t, dp);
+        int D=solve(i-1, j, s, t, dp);
+        int R=solve(i-1, j-1, s, t, dp);
+        return dp[i][j]=1 + Math.min(I, Math.min(R, D));
     }
 
-    public int min(String s, String t, int i, int j){
-        if(i==s.length()){
-            return t.length()-j;
-        }
-        if(j==t.length()){
-            return s.length()-i;
-        }
-        int ans=0;
-        if(s.charAt(i)==t.charAt(j)){
-            ans=min(s,t,i+1,j+1);
-        }
-        else{
-            int I=min(s,t,i,j+1);
-            int R=min(s,t,i+1,j+1);
-            int D=min(s,t,i+1,j);
-            ans=Math.min(I,Math.min(R,D))+1;
-        }
-        return ans;
-    }
+
+
+    // public int minDistance(String word1, String word2) {
+    //     int n=word1.length();
+    //     int m=word2.length();
+    //     return solve(n-1, m-1, word1, word2);
+    // }
+    // public int solve(int i, int j, String s, String t){
+    //     if(i<0){
+    //         return j+1;
+    //     }
+    //     if(j<0){
+    //         return i+1;
+    //     }
+    //     if(s.charAt(i)==t.charAt(j)){
+    //         return 0 + solve(i-1, j-1, s, t);
+    //     }
+    //     int I=solve(i, j-1, s, t);
+    //     int D=solve(i-1, j, s, t);
+    //     int R=solve(i-1, j-1, s, t);
+    //     return 1 + Math.min(I, Math.min(R, D));
+    // }
 }
