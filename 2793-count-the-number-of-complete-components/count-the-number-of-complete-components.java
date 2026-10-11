@@ -1,51 +1,51 @@
 class Solution {
     public int countCompleteComponents(int n, int[][] edges) {
-        ArrayList<ArrayList<Integer>> graph=new ArrayList<>();
-
+        Map<Integer, List<Integer>> map=new HashMap<>();
         for(int i=0; i<n; i++){
-            graph.add(new ArrayList<>());
+            map.put(i, new ArrayList<>());
         }
-
-        for(int[] i:edges){
-            graph.get(i[0]).add(i[1]);
-            graph.get(i[1]).add(i[0]);
+        for(int[] ad:edges){
+            int u=ad[0];
+            int v=ad[1];
+            map.get(v).add(u);
+            map.get(u).add(v);
         }
-
         int[] vis=new int[n];
+        Arrays.fill(vis, -1);
         int ans=0;
         for(int i=0; i<n; i++){
-            if(vis[i]==0){
-                ans+=bfs(i,vis,graph);
+            if(vis[i]==-1){
+                List<Integer> nodes=bfs(map, i, vis);
+                int degreeSum=0;
+
+                for(int node:nodes){
+                    degreeSum+=map.get(node).size();
+                }
+
+                int size=nodes.size();
+                if(degreeSum == size * (size-1)){
+                    ans++;
+                }
             }
         }
         return ans;
     }
-
-    private int bfs(int i, int[] vis, ArrayList<ArrayList<Integer>> graph){
-
+    public List<Integer> bfs(Map<Integer, List<Integer>> map, int idx, int[] vis) {
         Queue<Integer> q=new LinkedList<>();
-        q.add(i);
-        int m=0;
-        int e=0;
-        vis[i]=1;
-
+        List<Integer> nodes = new ArrayList<>();
+        q.add(idx);
+        vis[idx]=1;
         while(!q.isEmpty()){
             int rp=q.poll();
-            m++;
-
-            for(int nb:graph.get(rp)){
-                if(vis[nb]==0){
+            nodes.add(rp);
+            vis[rp]=1;
+            for(int nb:map.get(rp)){
+                if(vis[nb]==-1){
                     q.add(nb);
                     vis[nb]=1;
                 }
-                e++;
             }
-
         }
-
-        if((m*(m-1)/2)==(e/2)){
-            return 1;
-        }
-        return 0;
+        return nodes; 
     }
 }
